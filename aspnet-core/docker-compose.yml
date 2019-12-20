@@ -1,0 +1,39 @@
+version: '3.4'
+
+services:
+  myabp.web.host:
+    container_name: myabp
+    image: ${DOCKER_REGISTRY-}myabpwebhost
+    ports:
+      - 5000:80
+    build:
+      context: .
+      dockerfile: src/MyABP.Web.Host/Dockerfile
+    links:
+      - redis
+    volumes:
+      - "${CORE_DIR}/appsettings.json:/app/appsettings.json"
+      - "${CORE_DIR}/wwwroot:/app/wwwroot"
+  redis:
+    image: redis:5.0.7
+    container_name: redis
+    command: redis-server /etc/redis.conf
+    ports:
+      - 6379:6379
+    volumes:
+      - "${REDIS_DIR}/redis.conf:/etc/redis.conf"
+      - "${REDIS_DIR}/data:/data"
+  nginx:
+    hostname: nginx
+    image: nginx:1.17.6
+    container_name: nginx
+    links:
+      - myabp.web.host:myabp 
+    ports:
+      - 1995:80
+      - 443:443
+    volumes:
+      - "${NGINX_DIR}/nginx.conf:/etc/nginx/nginx.conf"
+      - "${NGINX_DIR}/log:/var/log/nginx"
+      - "${NGINX_DIR}/www:/var/www"
+      - "${NGINX_DIR}/etc/letsencrypt:/etc/letsencrypt"
