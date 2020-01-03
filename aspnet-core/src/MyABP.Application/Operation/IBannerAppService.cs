@@ -10,7 +10,5 @@ namespace MyABP.Operation
     public interface IBannerAppService : IAsyncCrudAppService<BannerDto, int, PagedAndSortedBannerResultRequestDto, BannerInput>
     {
         IList<EnumEntity> GetBannerType();
-
-        Task<FileUploadOutputDto> OnPostUploadBannerImg(IFormFile file);
     }
 }

@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace MyABP.Operation.Dto
+namespace MyABP.Common.Dto
 {
     /// <summary>
     /// 文件上传成功后的实体
     /// </summary>
-    public class FileUploadOutputDto
+    public class FileUploadOutput
     {
         /// <summary>
         /// 文件名称：文件上传的原始名称

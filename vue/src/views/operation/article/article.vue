@@ -45,7 +45,7 @@
     @Component({
         components:{CreateArticle,EditArticle}
     })
-    export default class LabaOrder extends AbpBase{
+    export default class Articles extends AbpBase{
         //filters
         pagerequest:PageArticleRequest=new PageArticleRequest();
         creationTime:Date[]=[];

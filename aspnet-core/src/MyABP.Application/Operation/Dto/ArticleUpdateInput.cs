@@ -7,8 +7,8 @@ using System.Text;
 
 namespace MyABP.Operation.Dto
 {
-    [AutoMapFrom(typeof(Article))]
-    public class ArticleDto : EntityDto<int>
+    [AutoMapTo(typeof(Article))]
+    public class ArticleUpdateInput: EntityDto<int>
     {
         [MaxLength(50)]
         public string Title { set; get; }
@@ -18,13 +18,13 @@ namespace MyABP.Operation.Dto
 
         public int Sort { set; get; }
 
+        public string Conent { set; get; }
+
         [Required]
         public int Type { set; get; }
 
         [Required]
         public int Status { set; get; }
-
-        public string Content { set; get; }
 
         public DateTime CreationTime { set; get; }
     }

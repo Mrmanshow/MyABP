@@ -17,6 +17,9 @@
                         <FormItem :label="L('Title')" prop="title">
                             <Input v-model="article.title" :maxlength="200"></Input>
                         </FormItem>
+                        <FormItem :label="L('Content')" prop="content">
+                            <editor ref="editor" :html="article.content" :url="url" @editorChange="editorChange"></editor>
+                        </FormItem>
                         <FormItem :label="L('Image')" prop="img">
                             <div class="demo-upload-list" v-for="item in uploadList">
                                 <template v-if="item.status === 'finished'">
@@ -32,7 +35,7 @@
                             </div>
                             <Input style="display: none" v-model="article.img"></Input>
                             <Upload ref="upload"
-                                    :action="`${ url }api/services/app/Article/OnPostUploadArticleImg`"
+                                    :action="`${ url }api/services/app/common/OnPostUploadImg`"
                                     :headers="header"
                                     :format="['jpg','jpeg','png']"
                                     :max-size="2048"
@@ -43,7 +46,8 @@
                                     :on-exceeded-size="handleMaxSize"
                                     :on-error="handleError"
                                     :before-upload="handleBeforeUpload"
-                                    :on-remove="handleRemove">
+                                    :on-remove="handleRemove"
+                                    :data="uploadData">
                                 <Button icon="ios-cloud-upload-outline">{{ L('UploadFiles') }}</Button>
                             </Upload>
                         </FormItem>
@@ -80,15 +84,24 @@
     import AbpBase from '../../../lib/abpbase'
     import Article from '../../../store/entities/article'
     import url from '../../../lib/url'
+    import Editor from '../../../components/editor.vue'
 
-    @Component
-    export default class EditBanner extends AbpBase{
+    @Component({
+        components: {Editor}
+    })
+    export default class EditArticle extends AbpBase{
         @Prop({type:Boolean,default:false}) value:boolean;
         article:Article=new Article();
         uploadList:Array<any> = []
         defaultList:Array<any> = []
         visible:Boolean = false
         header:Object = { Authorization: "Bearer "+ window.abp.auth.getToken() }
+        uploadData:Object = {
+            type: 'article'
+        }
+        editor:any = {
+            clearContent: null
+        }
 
         get articleType(){
             return this.$store.state.article.articleType;
@@ -98,6 +111,10 @@
         }
         get url(){
             return url;
+        }
+
+        mounted() {
+            this.editor = this.$refs.editor;
         }
 
         handleSuccess (res, file) {
@@ -151,22 +168,29 @@
         }
         cancel(){
             (this.$refs.articleForm as any).resetFields();
+            this.editor.clearContent();
             this.$emit('input',false);
         }
         visibleChange(value:boolean){
             if(!value){
+                this.cancel();
                 this.$emit('input',value);
             }else{
-                this.article=Util.extend(true,{},this.editArticle);
-                this.defaultList = [{
-                    name: this.article.img,
-                    url: `${ url }Upload/Article/${ this.article.img }`
-                }]
+                this.$store.dispatch('article/get',this.editArticle.id).then(()=>{
+                    this.article=Util.extend(true,{},this.$store.state.article.editArticle);
+                    this.defaultList = [{
+                        name: this.article.img,
+                        url: `${ url }Upload/Article/${ this.article.img }`
+                    }]
 
-                this.$nextTick(()=>{
-                    this.uploadList = this.$refs.upload['fileList'];
-                })
+                    this.$nextTick(()=>{
+                        this.uploadList = this.$refs.upload['fileList'];
+                    })
+                });
             }
+        }
+        editorChange(val) {
+            this.article.content = val;
         }
     }
 </script>

@@ -1,4 +1,5 @@
-﻿using Abp.Localization;
+﻿using Abp.Dependency;
+using Abp.Localization;
 using Abp.Modules;
 using Abp.Quartz;
 using Abp.Reflection.Extensions;
@@ -6,6 +7,7 @@ using Abp.Runtime.Caching.Redis;
 using Abp.Timing;
 using Abp.Zero;
 using Abp.Zero.Configuration;
+using Castle.MicroKernel.Registration;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using MyABP.Authorization.Roles;
@@ -13,8 +15,12 @@ using MyABP.Authorization.Users;
 using MyABP.Configuration;
 using MyABP.Localization;
 using MyABP.MultiTenancy;
+using MyABP.Redis;
 using MyABP.Timing;
+using ServiceStack.Redis;
+using StackExchange.Redis;
 using System;
+using System.Collections.Generic;
 
 namespace MyABP
 {
@@ -39,11 +45,11 @@ namespace MyABP
                 cache.DefaultSlidingExpireTime = TimeSpan.FromHours(1);
             });
 
-            //Configuration.Caching.UseRedis(options =>
-            //{
-            //    options.ConnectionString = _appConfiguration["RedisCache:ConnectionString"];
-            //    options.DatabaseId = _appConfiguration.GetValue<int>("RedisCache:DatabaseId");
-            //});
+            Configuration.Caching.UseRedis(options =>
+            {
+                options.ConnectionString = _appConfiguration["RedisCache:ConnectionString"];
+                options.DatabaseId = _appConfiguration.GetValue<int>("RedisCache:DatabaseId");
+            });
 
             // Declare entity types
             Configuration.Modules.Zero().EntityTypes.Tenant = typeof(Tenant);
@@ -63,6 +69,19 @@ namespace MyABP
 
         public override void Initialize()
         {
+            IocManager.Register(typeof(IRedisManager<>), typeof(RedisManager<>), DependencyLifeStyle.Transient);
+
+            string[] redisReadOnlyHosts = { _appConfiguration["ServiceStackRedis:ConnectionString"] };
+            IocManager.IocContainer.Register(Component.For<IRedisClientsManager>()
+                .Instance(new PooledRedisClientManager(int.Parse(_appConfiguration["ServiceStackRedis:DatabaseId"]), redisReadOnlyHosts))
+                .LifestyleSingleton());
+
+            var redisConnectOptions = ConfigurationOptions.Parse(_appConfiguration["StackExchangeRedis:ConnectionString"]);
+            redisConnectOptions.DefaultDatabase = int.Parse(_appConfiguration["StackExchangeRedis:DatabaseId"]);
+            IocManager.IocContainer.Register(Component.For<IConnectionMultiplexer>()
+              .Instance(ConnectionMultiplexer.Connect(redisConnectOptions))
+              .LifestyleSingleton());
+
             IocManager.RegisterAssemblyByConvention(typeof(MyABPCoreModule).GetAssembly());
         }
 

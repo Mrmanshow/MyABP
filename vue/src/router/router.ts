@@ -87,8 +87,16 @@ export const appRouters: Array<Router> = [{
                 component: () => import('../views/operation/article/article.vue')
             }
         ]
-    }
-]
+    },{
+    path: '/shop',
+    name: 'shop',
+    permission: '',
+    meta: { title: 'ShopMenu' },
+    icon: 'ios-card',
+    component: main,
+    children: [
+        { path: 'order', permission: 'Pages.Shop', meta: { title: 'Order' }, name: 'order', component: () => import('../views/shop/order/order.vue') }]
+    }]
 export const routers = [
     loginRouter,
     locking,

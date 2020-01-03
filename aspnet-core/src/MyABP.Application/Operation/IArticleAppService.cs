@@ -11,7 +11,5 @@ namespace MyABP.Operation
     public interface IArticleAppService: IAsyncCrudAppService<ArticleDto, int, PagedArticleResultRequestDto>
     {
         IList<EnumEntity> GetArticleType();
-
-        Task<FileUploadOutputDto> OnPostUploadArticleImg(IFormFile file);
     }
 }

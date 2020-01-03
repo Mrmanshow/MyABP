@@ -10,6 +10,7 @@ import tenant from './modules/tenant'
 import labaOrder from './modules/laba-order'
 import banner from './modules/banner'
 import article from "@/store/modules/article";
+import shopOrder from "@/store/modules/shop-order";
 
 const store = new Vuex.Store({
     state: {
@@ -30,7 +31,8 @@ const store = new Vuex.Store({
         tenant,
         labaOrder,
         banner,
-        article
+        article,
+        shopOrder
     }
 });
 

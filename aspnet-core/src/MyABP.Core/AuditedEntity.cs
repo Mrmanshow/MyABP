@@ -7,7 +7,7 @@ using System.Text;
 
 namespace MyABP
 {
-    public class AuditedEntity<T> : FullAuditedEntity<int>, IFullAudited
+    public class AuditedEntity<T> : FullAuditedEntity<T>, IFullAudited
     {
     }
 }

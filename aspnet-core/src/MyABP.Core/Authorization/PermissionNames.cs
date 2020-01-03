@@ -12,5 +12,8 @@
 
         public const string Pages_Operation = "Pages.Operation";
 
+        public const string Pages_Shop = "Pages.Shop";
+
+
     }
 }

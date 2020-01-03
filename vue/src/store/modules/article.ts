@@ -17,14 +17,15 @@ class ArticleModule extends ListModule<ArticleState,any,Article>{
         pageSize:10,
         list: new Array<Article>(),
         loading:false,
-        articleType: new Array()
+        articleType: new Array(),
+        editArticle: Article
     }
     actions={
         async getAll(context:ActionContext<ArticleState,any>,payload:any){
             context.state.loading=true;
-            let reponse=await Ajax.get('/api/services/app/Article/GetAll',{params:payload.data});
+            let response=await Ajax.get('/api/services/app/Article/GetAll',{params:payload.data});
             context.state.loading=false;
-            let page=reponse.data.result as PageResult<Article>;
+            let page=response.data.result as PageResult<Article>;
             context.state.totalCount=page.totalCount;
             context.state.list=page.items;
         },
@@ -34,12 +35,16 @@ class ArticleModule extends ListModule<ArticleState,any,Article>{
         async update(context:ActionContext<ArticleState,any>,payload:any){
             await Ajax.put('/api/services/app/Article/Update',payload.data);
         },
+        async get(context:ActionContext<ArticleState,any>,payload:any){
+            let response = await Ajax.get('/api/services/app/Article/Get?Id='+payload);
+            context.state.editArticle = response.data.result;
+        },
         async delete(context:ActionContext<ArticleState,any>,payload:any){
             await Ajax.delete('/api/services/app/Article/Delete?Id='+payload.data.id);
         },
         async getArticleType(context:ActionContext<ArticleState,any>){
-            let reponse = await Ajax.get('/api/services/app/Article/GetArticleType');
-            context.state.articleType=reponse.data.result;
+            let response = await Ajax.get('/api/services/app/Article/GetArticleType');
+            context.state.articleType=response.data.result;
         }
     };
     mutations={

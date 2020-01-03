@@ -29,5 +29,7 @@ namespace MyABP.Operation.Dto
         public DateTime ShowEndDate { set; get; }
 
         public DateTime CreationTime { set; get; }
+
+        public string Content { set; get; }
     }
 }

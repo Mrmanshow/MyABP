@@ -24,7 +24,7 @@
                             </div>
                             <Input style="display: none" v-model="banner.bannerImg"></Input>
                             <Upload ref="upload"
-                                    :action="`${ url }api/services/app/Banner/OnPostUploadBannerImg`"
+                                    :action="`${ url }api/services/app/common/OnPostUploadImg`"
                                     :headers="header"
                                     :format="['jpg','jpeg','png']"
                                     :max-size="1024"
@@ -34,7 +34,8 @@
                                     :on-exceeded-size="handleMaxSize"
                                     :on-error="handleError"
                                     :before-upload="handleBeforeUpload"
-                                    :on-remove="handleRemove">
+                                    :on-remove="handleRemove"
+                                    :data="uploadData">
                                 <Button icon="ios-cloud-upload-outline">{{ L('UploadFiles') }}</Button>
                             </Upload>
                         </FormItem>
@@ -95,6 +96,9 @@
         uploadList:Array<any> = []
         visible:Boolean = false
         header:Object = { Authorization: "Bearer "+window.abp.auth.getToken() }
+        uploadData:Object = {
+            type: 'banner'
+        }
 
         mounted () {
             this.uploadList = this.$refs.upload['fileList'];

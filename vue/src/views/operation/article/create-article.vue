@@ -17,6 +17,9 @@
                         <FormItem :label="L('Title')" prop="title">
                             <Input v-model="article.title" :maxlength="200"></Input>
                         </FormItem>
+                        <FormItem :label="L('Content')" prop="content">
+                            <editor ref="editor" :html="article.content" :url="url" @editorChange="editorChange"></editor>
+                        </FormItem>
                         <FormItem :label="L('Image')" prop="articleImg">
                             <div class="demo-upload-list" v-for="item in uploadList">
                                 <template v-if="item.status === 'finished'">
@@ -32,7 +35,7 @@
                             </div>
                             <Input style="display: none" v-model="article.bannerImg"></Input>
                             <Upload ref="upload"
-                                    :action="`${ url }api/services/app/Article/OnPostUploadArticleImg`"
+                                    :action="`${ url }api/services/app/Common/OnPostUploadImg`"
                                     :headers="header"
                                     :format="['jpg','jpeg','png']"
                                     :max-size="1024"
@@ -42,7 +45,8 @@
                                     :on-exceeded-size="handleMaxSize"
                                     :on-error="handleError"
                                     :before-upload="handleBeforeUpload"
-                                    :on-remove="handleRemove">
+                                    :on-remove="handleRemove"
+                                    :data="uploadData">
                                 <Button icon="ios-cloud-upload-outline">{{ L('UploadFiles') }}</Button>
                             </Upload>
                         </FormItem>
@@ -78,15 +82,20 @@
     import AbpBase from '../../../lib/abpbase'
     import Article from '../../../store/entities/article'
     import url from '../../../lib/url'
+    import Editor from '../../../components/editor.vue'
 
-    @Component
+    @Component({
+        components: {Editor}
+    })
     export default class CreateArticle extends AbpBase{
         @Prop({type:Boolean,default:false}) value:boolean;
         article:Article=new Article();
         uploadList:Array<any> = []
         visible:Boolean = false
         header:Object = { Authorization: "Bearer "+ window.abp.auth.getToken() }
-
+        uploadData:Object = {
+            type: 'article'
+        }
         mounted () {
             this.uploadList = this.$refs.upload['fileList'];
         }
@@ -155,6 +164,9 @@
             if(!value){
                 this.$emit('input',value);
             }
+        }
+        editorChange(val) {
+            this.article.content = val;
         }
     }
 </script>

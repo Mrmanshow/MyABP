@@ -13,6 +13,7 @@ namespace MyABP.Authorization
             context.CreatePermission(PermissionNames.Pages_Tenants, L("Tenants"), multiTenancySides: MultiTenancySides.Host);
             context.CreatePermission(PermissionNames.Pages_Games, L("Games"));
             context.CreatePermission(PermissionNames.Pages_Operation, L("Operation"));
+            context.CreatePermission(PermissionNames.Pages_Shop, L("Shop"));
         }
 
         private static ILocalizableString L(string name)

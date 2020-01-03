@@ -105,13 +105,13 @@
     <text name="EditTenant">编辑租户</text>
 
     
-    <text name="GameMenu">游戏菜单</text>
+    <text name="GameMenu">游戏</text>
     <text name="LabaOrder">拉霸订单</text>
-    <text name="Amount">下注金币</text>
+    <text name="BetAmount">下注金币</text>
     <text name="WinAmount">中奖金币</text>
     <text name="Position">滚动坐标</text>
 
-    <text name="OperationMenu">运营内容</text>
+    <text name="OperationMenu">运营</text>
     <text name="Banner">轮播图</text>
     <text name="Img">图片</text>
     <text name="Link">链接</text>
@@ -122,7 +122,7 @@
     <text name="LinkType">链接类型</text>
     <text name="ShowBeginDate">开始展示</text>
     <text name="ShowEndDate">结束展示</text>
-    <text name="ThisFieldIsRequired">请填写{0}</text>
+    <text name="FieldIsRequired">请填写{0}</text>
     <text name="ThirdPlatform">外部跳转</text>
     <text name="WePlatform">本平台链接</text>
     <text name="CreateNewBanner">创建新轮播图</text>
@@ -155,6 +155,24 @@
     <text name="BannerDetails">轮播图详情</text>
     <text name="DeleteArticleConfirm">确认删除该文章?</text>
     <text name="CreateNewArticle">创建新文章</text>
+    <text name="UploadTypeError">上传文件类型错误</text>
+    <text name="ShopMenu">商城</text>
+    <text name="Order">订单</text>
+    <text name="OrderCode">订单编号</text>
+    <text name="ProductName">商品名称</text>
+    <text name="Count">数量</text>
+    <text name="FullName">姓名</text>
+    <text name="Address">地址</text>
+    <text name="PhoneNumber">手机号码</text>
+    <text name="ExpressCode">快递单号</text>
+    <text name="Amount">金额</text>
+    <text name="ProductId">产品ID</text>
+    <text name="PayIntegration">积分支付</text>
+    <text name="Idx">主播ID</text>
+    <text name="AddressId">地址ID</text>
+    <text name="ContactWay">联系方式</text>
+    <text name="Remarks">备注</text>
+    <text name="PayPassword">支付密码</text>
 
   </texts>
 </localizationDictionary>

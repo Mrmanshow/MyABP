@@ -5,6 +5,8 @@ using MyABP.Authorization.Users;
 using MyABP.MultiTenancy;
 using MyABP.Game;
 using MyABP.Operation;
+using MyABP.Shop;
+using MyABP.Extensions;
 
 namespace MyABP.EntityFrameworkCore
 {
@@ -27,9 +29,33 @@ namespace MyABP.EntityFrameworkCore
 
         public DbSet<Article> Article { set; get; }
 
+        public DbSet<ProductOrder> ProductOrder { set; get; }
+
+        public DbSet<Address> Address { set; get; }
+
+        public DbSet<Product> Product { set; get; }
+
         public MyABPDbContext(DbContextOptions<MyABPDbContext> options)
             : base(options)
         {
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);        // Singularize table name
+
+            // 修改表名和字段格式（MySQL）
+            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+            {
+                if (!string.IsNullOrWhiteSpace(entityType.Relational().TableName))
+                {
+                    entityType.Relational().TableName = entityType.Relational().TableName.HumpToUnderline();
+                }
+                foreach (var property in entityType.GetProperties())
+                {
+                    property.Relational().ColumnName = property.Relational().ColumnName.HumpToUnderline();
+                }
+            }
         }
     }
 }
