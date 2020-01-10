@@ -11,6 +11,8 @@ import labaOrder from './modules/laba-order'
 import banner from './modules/banner'
 import article from "@/store/modules/article";
 import shopOrder from "@/store/modules/shop-order";
+import notifications from "@/store/modules/notifications";
+import notificationSubscriptionInfo from "@/store/modules/notifications-subscription-info";
 
 const store = new Vuex.Store({
     state: {
@@ -32,7 +34,9 @@ const store = new Vuex.Store({
         labaOrder,
         banner,
         article,
-        shopOrder
+        shopOrder,
+        notifications,
+        notificationSubscriptionInfo
     }
 });
 

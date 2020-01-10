@@ -5,6 +5,9 @@ import { Store, Module, ActionContext } from 'vuex'
 import Vuex from 'vuex';
 import ajax from '../../lib/ajax'
 import appconst from '../../lib/appconst'
+import Ajax from "@/lib/ajax";
+import User from "@/store/entities/user";
+import PageResult from "@/store/entities/page-result";
 Vue.use(Vuex);
 interface AppState {
     cachePage: Array<any>;
@@ -22,6 +25,7 @@ interface AppState {
     messageCount: number;
     dontCache: Array<any>;
     noticeList: Array<any>;
+    noticeCount: number;
 }
 class AppModule implements Module<AppState, any>{
     namespaced = true;
@@ -53,7 +57,8 @@ class AppModule implements Module<AppState, any>{
         tagsList: [...otherRouters.children],
         messageCount: 0,
         dontCache: [],
-        noticeList: [{ read: false, type: 0, title: 'First notice', description: 'One day ago' }, { read: false, type: 1 }, { read: false, type: 0, title: 'Second notice', description: 'One month ago' }]
+        noticeList: [],
+        noticeCount: 0
     };
     mutations = {
         logout(state: AppState) {
@@ -198,6 +203,11 @@ class AppModule implements Module<AppState, any>{
             var tokenExpireDate = payload.data.rememberMe ? (new Date(new Date().getTime() + 1000 * rep.data.result.expireInSeconds)) : undefined;
             Util.abp.auth.setToken(rep.data.result.accessToken, tokenExpireDate);
             Util.abp.utils.setCookieValue(appconst.authorization.encrptedAuthTokenName, rep.data.result.encryptedAccessToken, tokenExpireDate, Util.abp.appPath)
+        },
+        async getNoticeList(content: ActionContext<AppState, any>, payload: any) {
+            let response=await Ajax.get('/api/services/app/UserNotificationInfo/GetAll',{params:payload.data});
+            content.state.noticeList = response.data.result.items;
+            content.state.noticeCount = response.data.result.totalCount;
         },
     }
 }

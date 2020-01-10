@@ -35,6 +35,8 @@ namespace MyABP.EntityFrameworkCore
 
         public DbSet<Product> Product { set; get; }
 
+        public DbSet<NotificationsTemplate> NotificationsTemplate { set; get; }
+
         public MyABPDbContext(DbContextOptions<MyABPDbContext> options)
             : base(options)
         {
@@ -42,7 +44,15 @@ namespace MyABP.EntityFrameworkCore
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);        // Singularize table name
+            base.OnModelCreating(modelBuilder);
+
+            //modelBuilder.Ignore<NotificationSubscriptionInfo>().;
+            //modelBuilder.Entity<NotificationSubscriptionInfoForUser>()
+            //    .HasBaseType<NotificationSubscriptionInfo>();
+
+            //modelBuilder.Entity<NotificationSubscriptionInfoForUser>()
+            //    .HasDiscriminator<NotificationSubscriptionInfoForUser, string>(x => x.Discriminator)
+            //    .HasValue("NotificationSubscriptionInfo");
 
             // 修改表名和字段格式（MySQL）
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())

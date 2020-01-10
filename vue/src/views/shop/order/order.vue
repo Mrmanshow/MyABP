@@ -31,7 +31,7 @@
     import Util from '@/lib/util'
     import AbpBase from '@/lib/abpbase'
     import PageRequest from '@/store/entities/page-request'
-    import CreateOrder from './create-order'
+    import CreateOrder from './create-order.vue'
 
     class  PageArticleRequest extends PageRequest{
         keyword:string;

@@ -85,6 +85,13 @@ export const appRouters: Array<Router> = [{
                 meta: {title: 'Article'},
                 name: 'article',
                 component: () => import('../views/operation/article/article.vue')
+            },
+            {
+                path: 'notifications',
+                permission: 'Pages.Operation',
+                meta: {title: 'Notifications'},
+                name: 'notifications',
+                component: () => import('../views/operation/notifications/notifications.vue')
             }
         ]
     },{

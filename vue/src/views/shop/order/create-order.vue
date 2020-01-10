@@ -49,7 +49,6 @@
     import { Component, Vue,Inject, Prop,Watch } from 'vue-property-decorator';
     import AbpBase from '../../../lib/abpbase'
     import ShopOrder from '../../../store/entities/shop-order'
-    import url from '../../../lib/url'
 
     @Component
     export default class CreateShopOrder extends AbpBase{

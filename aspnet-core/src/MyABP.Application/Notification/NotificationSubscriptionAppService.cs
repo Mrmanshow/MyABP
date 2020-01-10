@@ -1,10 +1,9 @@
 ﻿using Abp;
 using Abp.Domain.Entities;
+using Abp.Domain.Uow;
 using Abp.Notifications;
 using MyABP.Game;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace MyABP.Notification
@@ -21,7 +20,7 @@ namespace MyABP.Notification
         //Subscribe to a general notification
         public async Task Subscribe_SentFriendshipRequest(int? tenantId, long userId)
         {
-            await _notificationSubscriptionManager.SubscribeAsync(new UserIdentifier(tenantId, userId), "SentFriendshipRequest");
+            await this._notificationSubscriptionManager.SubscribeAsync(new UserIdentifier(tenantId, userId), "SentFriendshipRequest");
         }
 
         //Subscribe to an entity notification

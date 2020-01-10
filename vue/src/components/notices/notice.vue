@@ -1,7 +1,7 @@
 <template>
     <div class="lock-screen-btn-con">
         <Poptip placement="bottom-end" @on-popper-show="getNotices">
-            <Badge :count="unReadCount" dot>
+            <Badge :count="noticeCount" dot>
                 <i class="iconfont" style="font-size:20px">&#xe70a;</i>
             </Badge>
                 <div slot="content" class="content">
@@ -14,14 +14,14 @@
                             <div v-if="noticeCount">
                                 <div class="list">
                                     <Spin size="large" fix v-if="noticeSpinShow"></Spin>
-                                    <div class="list-item" v-for="(notice,index) in noticeArray" :key="index">
+                                    <div class="list-item" v-for="(notice,index) in noticeList" :key="index">
                                         <div class="list-item-meta">
                                             <div class="list-item-meta-content">
                                                 <h4 class="list-item-meta-title">
-                                                    <div class="title">{{notice.title}}</div>
+                                                    <div class="title">{{notice.notification.data.senderUserName}}</div>
                                                 </h4>
                                                 <div class="list-item-meta-description">
-                                                    <div class="description">{{notice.description}}</div>
+                                                    <div class="description">{{notice.notification.data.friendshipMessage}}</div>
                                                 </div>
                                             </div>
                                         </div>
@@ -85,15 +85,19 @@ export default class Notice extends AbpBase{
     get noticeList():Array<any>{
         return this.$store.state.app.noticeList;
     }
+    get noticeCount(){
+        return this.$store.state.app.noticeCount;
+    }
+
     get unReadCount(){
         return this.noticeList.filter(n=>n.read==false).length
     }
     get noticeArray(){
         return this.noticeList.filter(n=>n.read==false&&n.type===0)
     }
-    get noticeCount(){
-        return this.noticeList.filter(n=>n.read==false&&n.type===0).length
-    }
+    // get noticeCount(){
+    //     return this.noticeList.filter(n=>n.read==false&&n.type===0).length
+    // }
     get messageArray(){
         return this.noticeList.filter(n=>n.read==false&&n.type===1)
     }
@@ -130,10 +134,12 @@ export default class Notice extends AbpBase{
             return name
         }
     }
-    getNotices(){
-        setTimeout(()=>{
+    async getNotices(){
+        await this.$store.dispatch({
+            type:'app/getNoticeList'
+        }).then(()=>{
             this.noticeSpinShow=false;
-        },2000)
+        })
     }
     created() {
         abp.event.on('abp.notifications.received', function (userNotification) {

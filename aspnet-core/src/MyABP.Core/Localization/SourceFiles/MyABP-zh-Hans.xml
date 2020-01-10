@@ -174,6 +174,17 @@
     <text name="Remarks">备注</text>
     <text name="PayPassword">支付密码</text>
 
+    <text name="Notifications">通知</text>
+    <text name="SubscribedNumber">订阅数量</text>
+    <text name="PushNumber">通知次数</text>
+
+    <text name="EditNotifications">编辑通知</text>
+    <text name="NotificationsUserList">通知用户列表</text>
+    <text name="Unsubscribe">退订</text>
+    <text name="DeleteNotificationsConfirm">确认删除该通知吗？</text>
+    <text name="UnsubscribeNotificationsConfirm">确认退订用户的该通知吗？</text>
+
+    
   </texts>
 </localizationDictionary>
 
